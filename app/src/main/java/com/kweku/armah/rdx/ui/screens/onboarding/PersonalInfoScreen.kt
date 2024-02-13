@@ -46,7 +46,7 @@ import com.kweku.armah.rdx.domain.model.OnboardingData
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PersonalInfoScreen(
-    uiState: OnboardingData,
+    uiData: OnboardingData,
     onPreviousClick: () -> Unit,
     onNextClick: () -> Unit,
     onFirstNameChange: (String) -> Unit,
@@ -89,7 +89,7 @@ fun PersonalInfoScreen(
         ) {
 
             OutlinedTextField(
-                value = uiState.firstName,
+                value = uiData.firstName,
                 modifier = Modifier
                     .widthIn(min = 500.dp)
                     .padding(8.dp),
@@ -115,7 +115,7 @@ fun PersonalInfoScreen(
             )
 
             OutlinedTextField(
-                value = uiState.lastName,
+                value = uiData.lastName,
                 modifier = Modifier
                     .widthIn(min = 500.dp)
                     .padding(8.dp)
@@ -142,7 +142,7 @@ fun PersonalInfoScreen(
             )
 
             OutlinedTextField(
-                value = uiState.phoneNumber,
+                value = uiData.phoneNumber,
                 modifier = Modifier
                     .widthIn(min = 500.dp)
                     .padding(8.dp)
@@ -165,7 +165,7 @@ fun PersonalInfoScreen(
                         tint = MaterialTheme.colorScheme.primary
                     )
                 },
-                isError = !uiState.isPhoneNumberValid
+                isError = !uiData.isPhoneNumberValid
             )
 
             Spacer(
@@ -185,7 +185,7 @@ fun PersonalInfoScreen(
                 }
 
                 val isEnabled =
-                    (uiState.firstName.isNotEmpty() && uiState.lastName.isNotEmpty() && uiState.phoneNumber.isNotEmpty() && uiState.isPhoneNumberValid)
+                    (uiData.firstName.isNotEmpty() && uiData.lastName.isNotEmpty() && uiData.phoneNumber.isNotEmpty() && uiData.isPhoneNumberValid)
 
                 Button(
                     onClick = onNextClick,
@@ -208,6 +208,6 @@ fun PersonalInfoScreenPreview() {
         onFirstNameChange = {},
         onLastNameChange = {},
         onPhoneNumberChange = {},
-        uiState = OnboardingData()
+        uiData = OnboardingData()
     )
 }

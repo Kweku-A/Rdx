@@ -37,7 +37,7 @@ class MainViewModelTest {
         assertTrue(
             appPreferenceDataStore.getDataStore(PreferenceKeys.userInfo).first()?.isEmpty() ?: true
         )
-        sut.getUserLogin()
+        sut.getUserInfo()
         sut.uiState.test {
             val item1 = awaitItem()
             assertTrue(item1.uiData.firstName.isEmpty())
@@ -64,7 +64,7 @@ class MainViewModelTest {
             appPreferenceDataStore.getDataStore(PreferenceKeys.userInfo).first()?.isNotEmpty() ?: false
         )
 
-        sut.getUserLogin()
+        sut.getUserInfo()
         sut.uiState.test {
             val item1 = awaitItem()
             assertTrue(item1.uiData.firstName.isEmpty())

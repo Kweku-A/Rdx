@@ -1,12 +1,12 @@
 package com.kweku.armah.rdx.domain.usecase
 
-import com.kweku.armah.rdx.domain.util.EmailValidator
+import com.kweku.armah.rdx.domain.util.IsValidEmail
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-class EmailValidatorTest {
-    private val sut = EmailValidator()
+class IsValidEmailTest {
+    private val sut = IsValidEmail()
 
     @Test
     fun should_return_true_when_email_format_is_correct(){

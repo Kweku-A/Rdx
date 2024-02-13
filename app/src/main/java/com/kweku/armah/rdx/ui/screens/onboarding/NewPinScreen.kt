@@ -44,7 +44,7 @@ import com.kweku.armah.rdx.domain.model.OnboardingData
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewPinScreen(
-    uiState: OnboardingData,
+    uiData: OnboardingData,
     onPreviousClick: () -> Unit,
     onNextClick: () -> Unit,
     onPinChange: (String) -> Unit,
@@ -83,7 +83,7 @@ fun NewPinScreen(
         ) {
 
             OutlinedTextField(
-                value = uiState.pin,
+                value = uiData.pin,
                 modifier = Modifier
                     .widthIn(max = 500.dp)
                     .padding(8.dp),
@@ -126,7 +126,7 @@ fun NewPinScreen(
 
                 Button(
                     onClick = onNextClick,
-                    enabled = (uiState.pin.isNotEmpty()),
+                    enabled = (uiData.pin.isNotEmpty()),
                     modifier = Modifier.width(150.dp)
                 ) {
                     Text(text = stringResource(R.string.next))
@@ -143,6 +143,6 @@ fun NewPinScreenPreview() {
         onPreviousClick = {},
         onNextClick = {},
         onPinChange = {},
-        uiState = OnboardingData()
+        uiData = OnboardingData()
     )
 }

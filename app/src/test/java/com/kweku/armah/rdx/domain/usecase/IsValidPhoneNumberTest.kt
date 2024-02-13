@@ -1,12 +1,12 @@
 package com.kweku.armah.rdx.domain.usecase
 
-import com.kweku.armah.rdx.domain.util.PhoneNumberValidator
+import com.kweku.armah.rdx.domain.util.IsValidPhoneNumber
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-class PhoneValidatorTest {
-    private val sut = PhoneNumberValidator()
+class IsValidPhoneNumberTest {
+    private val sut = IsValidPhoneNumber()
 
     @Test
     fun should_return_true_when_telephone_number_is_correct(){

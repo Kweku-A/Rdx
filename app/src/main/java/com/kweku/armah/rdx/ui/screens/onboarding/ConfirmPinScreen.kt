@@ -44,7 +44,7 @@ import com.kweku.armah.rdx.domain.model.OnboardingData
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ConfirmPinScreen(
-    uiState: OnboardingData,
+    uiData: OnboardingData,
     onPreviousClick: () -> Unit,
     onFinishClick: () -> Unit,
     onPinChange: (String) -> Unit,
@@ -81,7 +81,7 @@ fun ConfirmPinScreen(
         ) {
 
             OutlinedTextField(
-                value = uiState.confirmPin,
+                value = uiData.confirmPin,
                 modifier = Modifier
                     .widthIn(max = 500.dp)
                     .padding(8.dp),
@@ -123,7 +123,7 @@ fun ConfirmPinScreen(
 
                 Button(
                     onClick = onFinishClick,
-                    enabled = (uiState.confirmPin.isNotEmpty()),
+                    enabled = (uiData.confirmPin.isNotEmpty()),
                     modifier = Modifier.width(150.dp)
                 ) {
                     Text(text = stringResource(R.string.finish))
@@ -140,6 +140,6 @@ fun ConfirmPinScreenPreview() {
         onPreviousClick = {},
         onFinishClick = {},
         onPinChange = {},
-        uiState = OnboardingData()
+        uiData = OnboardingData()
     )
 }

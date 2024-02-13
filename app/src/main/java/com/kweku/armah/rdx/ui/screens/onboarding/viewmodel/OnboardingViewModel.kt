@@ -7,9 +7,9 @@ import com.kweku.armah.rdx.data.AppPreferenceDataStore
 import com.kweku.armah.rdx.data.PreferenceKeys
 import com.kweku.armah.rdx.domain.model.OnboardingData
 import com.kweku.armah.rdx.domain.model.UserInfo
-import com.kweku.armah.rdx.domain.util.EmailValidator
-import com.kweku.armah.rdx.domain.util.PhoneNumberValidator
-import com.kweku.armah.rdx.ui.screens.destinations.MainScreenDestinations
+import com.kweku.armah.rdx.domain.util.IsValidEmail
+import com.kweku.armah.rdx.domain.util.IsValidPhoneNumber
+import com.kweku.armah.rdx.ui.screens.destinations.BaseScreenDestinations
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
@@ -19,8 +19,8 @@ import javax.inject.Inject
 @HiltViewModel
 class OnboardingViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val emailValidator: EmailValidator,
-    private val phoneNumberValidator: PhoneNumberValidator,
+    private val isValidEmail: IsValidEmail,
+    private val isValidPhoneNumber: IsValidPhoneNumber,
     private val appPreferenceDataStore: AppPreferenceDataStore,
     private val json: Json
 ) : ViewModel() {
@@ -52,7 +52,7 @@ class OnboardingViewModel @Inject constructor(
         savedStateHandle["onboardingState"] =
             savedStateHandle.get<OnboardingData>("onboardingState")?.copy(
                 email = email,
-                isEmailValid = emailValidator(email)
+                isEmailValid = isValidEmail(email)
             )
     }
 
@@ -67,7 +67,7 @@ class OnboardingViewModel @Inject constructor(
         savedStateHandle["onboardingState"] =
             savedStateHandle.get<OnboardingData>("onboardingState")?.copy(
                 phoneNumber = phoneNumber,
-                isPhoneNumberValid = phoneNumberValidator(phoneNumber)
+                isPhoneNumberValid = isValidPhoneNumber(phoneNumber)
             )
     }
 
@@ -109,7 +109,7 @@ class OnboardingViewModel @Inject constructor(
 
                     savedStateHandle["onboardingState"] =
                         uiData.copy(
-                            onFinishNavigationRoute = MainScreenDestinations.Main.toString()
+                            onFinishNavigationRoute = BaseScreenDestinations.Main.toString()
                         )
                 }
             }

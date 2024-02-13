@@ -50,7 +50,6 @@ import com.kweku.armah.rdx.R
 import com.kweku.armah.rdx.domain.model.UserInfo
 import com.kweku.armah.rdx.domain.wrapper.UiState
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
     uiState: UiState<UserInfo>,
@@ -66,158 +65,166 @@ fun MainScreen(
 
         false -> {
             if (uiState.uiData.firstName.isNotEmpty()) {
-
-                var showLogoutDialog by rememberSaveable {
-                    mutableStateOf(false)
-                }
-
-                Scaffold(topBar = {
-                    TopAppBar(
-                        title = { Text(text = stringResource(R.string.dashboard)) },
-                        actions = {
-                            IconButton(onClick = {
-                                showLogoutDialog = true
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Filled.PowerSettingsNew,
-                                    contentDescription = stringResource(R.string.logout)
-                                )
-                            }
-                        },
-                    )
-                }) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(it),
-                        verticalArrangement = Arrangement.Top,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-
-                        if (showLogoutDialog) {
-                            AppDialog(
-                                header = stringResource(R.string.logging_out),
-                                dialogMessage = stringResource(R.string.are_you_sure_you_want_to_log_out),
-                                onNegativeClick = {
-                                    showLogoutDialog = false
-                                },
-                                onPositiveClick = {
-                                    showLogoutDialog = false
-                                    onLogout()
-                                },
-                                negativeButtonText = stringResource(R.string.cancel),
-                                positiveButtonText =stringResource(R.string.logout),
-                            )
-                        }
-
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 18.dp, vertical = 16.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Start
-                        ) {
-
-                            val color = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f)
-
-                            Text(
-                                modifier = Modifier
-                                    .padding(8.dp)
-                                    .drawBehind {
-                                        drawCircle(
-                                            color = color,
-                                            radius = this.size.maxDimension
-                                        )
-                                    },
-                                text = uiState.uiData.firstName.first().toString()
-                                    .uppercase(),
-                                style = TextStyle(
-                                    color = MaterialTheme.colorScheme.onPrimary,
-                                    fontSize = 20.sp
-                                )
-                            )
-
-                            Text(
-                                stringResource(
-                                    R.string.welcome_user,
-                                    uiState.uiData.firstName,
-                                    uiState.uiData.lastName
-                                ),
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                                style = TextStyle(
-                                    fontSize = TextUnit(value = 20f, type = TextUnitType.Sp)
-                                ),
-                                modifier = Modifier.padding(start = 16.dp)
-                            )
-                        }
-
-                        var showDetails by rememberSaveable {
-                            mutableStateOf(false)
-                        }
-
-                        OutlinedButton(onClick = { showDetails = !showDetails }) {
-                            Text(text = "Click to additional info")
-                        }
-
-                        AnimatedVisibility(visible = showDetails) {
-                            OutlinedCard(modifier = Modifier.width(350.dp)) {
-                                val textStyle = TextStyle(
-                                    fontSize = TextUnit(
-                                        value = 18f,
-                                        type = TextUnitType.Sp
-                                    ),
-                                    textAlign = TextAlign.Start
-                                )
-
-                                val rowModifier = Modifier
-                                    .padding(bottom = 4.dp)
-                                    .fillMaxWidth()
-                                    .background(
-                                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.05f)
-                                    )
-                                    .padding(8.dp)
-                                Row(
-                                    modifier = rowModifier,
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.Start
-                                ) {
-
-                                    Text(
-                                        text = "Telephone:",
-                                        style = textStyle,
-                                    )
-                                    Text(
-                                        text = uiState.uiData.phoneNumber,
-                                        modifier = Modifier.padding(start = 6.dp),
-                                        style = textStyle,
-                                    )
-                                }
-
-                                Row(
-                                    modifier = rowModifier,
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.Start
-                                ) {
-
-                                    Text(
-                                        text = "Email:",
-                                        style = textStyle,
-                                    )
-                                    Text(
-                                        text = uiState.uiData.email,
-                                        modifier = Modifier.padding(start = 6.dp),
-                                        style = textStyle,
-                                        maxLines = 1,
-                                        overflow = TextOverflow.Ellipsis,
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
+                MainContent(uiState = uiState, onLogout = onLogout)
             } else {
                 navigateToOnboarding()
+            }
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+private fun MainContent(
+    onLogout: () -> Unit,
+    uiState: UiState<UserInfo>
+) {
+    var showLogoutDialog by rememberSaveable {
+        mutableStateOf(false)
+    }
+
+    Scaffold(topBar = {
+        TopAppBar(
+            title = { Text(text = stringResource(R.string.dashboard)) },
+            actions = {
+                IconButton(onClick = {
+                    showLogoutDialog = true
+                }) {
+                    Icon(
+                        imageVector = Icons.Filled.PowerSettingsNew,
+                        contentDescription = stringResource(R.string.logout)
+                    )
+                }
+            },
+        )
+    }) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+            if (showLogoutDialog) {
+                AppDialog(
+                    header = stringResource(R.string.logging_out),
+                    dialogMessage = stringResource(R.string.are_you_sure_you_want_to_log_out),
+                    onNegativeClick = {
+                        showLogoutDialog = false
+                    },
+                    onPositiveClick = {
+                        showLogoutDialog = false
+                        onLogout()
+                    },
+                    negativeButtonText = stringResource(R.string.cancel),
+                    positiveButtonText = stringResource(R.string.logout),
+                )
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 18.dp, vertical = 16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start
+            ) {
+
+                val color = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f)
+
+                Text(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .drawBehind {
+                            drawCircle(
+                                color = color,
+                                radius = this.size.maxDimension
+                            )
+                        },
+                    text = uiState.uiData.firstName.first().toString()
+                        .uppercase(),
+                    style = TextStyle(
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        fontSize = 20.sp
+                    )
+                )
+
+                Text(
+                    stringResource(
+                        R.string.welcome_user,
+                        uiState.uiData.firstName,
+                        uiState.uiData.lastName
+                    ),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = TextStyle(
+                        fontSize = TextUnit(value = 20f, type = TextUnitType.Sp)
+                    ),
+                    modifier = Modifier.padding(start = 16.dp)
+                )
+            }
+
+            var showDetails by rememberSaveable {
+                mutableStateOf(false)
+            }
+
+            OutlinedButton(onClick = { showDetails = !showDetails }) {
+                Text(text = "Click to additional info")
+            }
+
+            AnimatedVisibility(visible = showDetails) {
+                OutlinedCard(modifier = Modifier.width(350.dp)) {
+                    val textStyle = TextStyle(
+                        fontSize = TextUnit(
+                            value = 18f,
+                            type = TextUnitType.Sp
+                        ),
+                        textAlign = TextAlign.Start
+                    )
+
+                    val rowModifier = Modifier
+                        .padding(bottom = 4.dp)
+                        .fillMaxWidth()
+                        .background(
+                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.05f)
+                        )
+                        .padding(8.dp)
+                    Row(
+                        modifier = rowModifier,
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Start
+                    ) {
+
+                        Text(
+                            text = "Telephone:",
+                            style = textStyle,
+                        )
+                        Text(
+                            text = uiState.uiData.phoneNumber,
+                            modifier = Modifier.padding(start = 6.dp),
+                            style = textStyle,
+                        )
+                    }
+
+                    Row(
+                        modifier = rowModifier,
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Start
+                    ) {
+
+                        Text(
+                            text = "Email:",
+                            style = textStyle,
+                        )
+                        Text(
+                            text = uiState.uiData.email,
+                            modifier = Modifier.padding(start = 6.dp),
+                            style = textStyle,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    }
+                }
             }
         }
     }

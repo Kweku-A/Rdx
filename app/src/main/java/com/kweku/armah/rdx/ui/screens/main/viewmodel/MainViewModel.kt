@@ -26,7 +26,7 @@ class MainViewModel @Inject constructor(
     val uiState = _uiState.asStateFlow()
 
 
-    fun getUserLogin() {
+    fun getUserInfo() {
         _uiState.update {
             it.copy(
                 isLoading = true

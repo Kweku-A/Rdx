@@ -16,8 +16,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import com.kweku.armah.rdx.ui.screens.destinations.BaseScreenDestinations
 import com.kweku.armah.rdx.ui.screens.main.MainScreen
-import com.kweku.armah.rdx.ui.screens.destinations.MainScreenDestinations
 import com.kweku.armah.rdx.ui.screens.main.viewmodel.MainViewModel
 import com.kweku.armah.rdx.ui.screens.onboarding.ConfirmPinScreen
 import com.kweku.armah.rdx.ui.screens.onboarding.CredentialsScreen
@@ -43,7 +43,7 @@ fun AppNavHost(modifier: Modifier = Modifier) {
 
     NavHost(
         navController = navController,
-        startDestination = MainScreenDestinations.Main.toString(),
+        startDestination = BaseScreenDestinations.Main.toString(),
         modifier = modifier,
         enterTransition = {
             slideIntoContainer(
@@ -71,25 +71,25 @@ fun AppNavHost(modifier: Modifier = Modifier) {
         }
     ) {
 
-        composable(route = MainScreenDestinations.Main.toString()) {
+        composable(route = BaseScreenDestinations.Main.toString()) {
             val mainViewModel: MainViewModel = hiltViewModel()
             val uiState by mainViewModel.uiState.collectAsStateWithLifecycle()
 
             MainScreen(uiState = uiState, onLogout = {
                 mainViewModel.onLogout()
-                navigateToDestinationAndClearStack(MainScreenDestinations.Onboarding.toString())
+                navigateToDestinationAndClearStack(BaseScreenDestinations.Onboarding.toString())
             }, navigateToOnboarding = {
-                navigateToDestinationAndClearStack(MainScreenDestinations.Onboarding.toString())
+                navigateToDestinationAndClearStack(BaseScreenDestinations.Onboarding.toString())
             })
 
             LaunchedEffect(Unit) {
-                mainViewModel.getUserLogin()
+                mainViewModel.getUserInfo()
             }
         }
 
         navigation(
             startDestination = OnboardingScreenDestinations.Welcome.toString(),
-            route = MainScreenDestinations.Onboarding.toString()
+            route = BaseScreenDestinations.Onboarding.toString()
         ) {
 
             composable(route = OnboardingScreenDestinations.Welcome.toString()) {
@@ -138,7 +138,7 @@ fun AppNavHost(modifier: Modifier = Modifier) {
                     onNextClick = {
                         navController.navigate(OnboardingScreenDestinations.PersonalInfo.toString())
                     },
-                    uiState = state.value
+                    uiData = state.value
                 )
             }
 
@@ -164,7 +164,7 @@ fun AppNavHost(modifier: Modifier = Modifier) {
                     onNextClick = {
                         navController.navigate(OnboardingScreenDestinations.NewPin.toString())
                     },
-                    uiState = state.value
+                    uiData = state.value
                 )
             }
 
@@ -184,7 +184,7 @@ fun AppNavHost(modifier: Modifier = Modifier) {
                     onNextClick = {
                         navController.navigate(OnboardingScreenDestinations.ConfirmPin.toString())
                     },
-                    uiState = state.value
+                    uiData = state.value
                 )
             }
 
@@ -208,7 +208,7 @@ fun AppNavHost(modifier: Modifier = Modifier) {
                     onFinishClick = {
                         onboardingViewModel.onFinishClicked()
                     },
-                    uiState = state.value
+                    uiData = state.value
                 )
             }
         }

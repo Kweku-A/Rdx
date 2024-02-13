@@ -2,7 +2,7 @@ package com.kweku.armah.rdx.domain.util
 
 import javax.inject.Inject
 
-class PhoneNumberValidator @Inject constructor() {
+class IsValidPhoneNumber @Inject constructor() {
 
     operator fun invoke(phoneNumber: String): Boolean {
         val phoneNumberRegex =

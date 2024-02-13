@@ -52,7 +52,7 @@ import com.kweku.armah.rdx.domain.model.OnboardingData
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CredentialsScreen(
-    uiState: OnboardingData,
+    uiData: OnboardingData,
     onPreviousClick: () -> Unit,
     onNextClick: () -> Unit,
     onPasswordChange: (String) -> Unit,
@@ -94,7 +94,7 @@ fun CredentialsScreen(
         ) {
 
             OutlinedTextField(
-                value = uiState.email,
+                value = uiData.email,
                 modifier = Modifier
                     .widthIn(min = 500.dp)
                     .padding(8.dp),
@@ -117,12 +117,12 @@ fun CredentialsScreen(
                         tint = MaterialTheme.colorScheme.primary
                     )
                 },
-                isError = !uiState.isEmailValid
+                isError = !uiData.isEmailValid
             )
 
 
             OutlinedTextField(
-                value = uiState.password,
+                value = uiData.password,
                 modifier = Modifier
                     .widthIn(min = 500.dp)
                     .padding(8.dp)
@@ -183,7 +183,7 @@ fun CredentialsScreen(
                 }
 
                 val isEnabled =
-                    (uiState.password.isNotEmpty() && uiState.email.isNotEmpty() && uiState.isEmailValid)
+                    (uiData.password.isNotEmpty() && uiData.email.isNotEmpty() && uiData.isEmailValid)
 
                 Button(
                     onClick = onNextClick,
@@ -205,6 +205,6 @@ fun CredentialsScreenPreview() {
         onNextClick = {},
         onPasswordChange = {},
         onEmailChange = {},
-        uiState = OnboardingData()
+        uiData = OnboardingData()
     )
 }
