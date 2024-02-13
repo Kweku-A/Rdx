@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">Rdx</string>
+    <string name="welcome_message">Welcome to the demo onboarding flow</string>
+    <string name="terms_of_service_title">Terms of Service</string>
+    <string name="back_icon_desription">back icon</string>
+    <string name="terms_of_service_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        Fusce mattis rhoncus urna eu sodales. Proin et pulvinar ex. Maecenas vehicula, mauris vel
+        dapibus mattis, libero libero fermentum quam, eget varius leo ante nec justo.
+        Nullam purus orci, viverra eget diam ac, mollis rutrum leo. Proin porta aliquam lacinia.\n\n
+
+        Nulla molestie velit neque, ac ornare leo fermentum eu. Cras bibendum nunc magna, in
+        sodales sem laoreet eu. Etiam neque neque, venenatis sit amet magna eget, vehicula aliquet
+        felis. Maecenas semper varius est, sit amet aliquet diam accumsan a.\n\n
+
+        Vivamus volutpat vel leo vel suscipit. Proin varius libero a tincidunt blandit. Nam
+        placerat tortor sed orci pharetra luctus.Etiam placerat faucibus erat eget posuere.
+        Aliquam bibendum est ex, pharetra mattis lectus pellentesque quis. Vivamus sapien nibh,
+        semper mattis lobortis vel, porttitor ut elit.
+        </string>
+    <string name="agree_to_terms">Agree to Terms of Service</string>
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
+    <string name="credentials">Credentials</string>
+    <string name="password">Password</string>
+    <string name="password_visibility">Password visibility</string>
+    <string name="email">Email</string>
+    <string name="new_pin">New Pin</string>
+    <string name="pin">Pin (6-Digits)</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="confirm_pin">Confirm pin (6-Digits)</string>
+    <string name="finish">Finish</string>
+    <string name="logout">Logout</string>
+    <string name="telephone">Telephone</string>
+    <string name="welcome_user">Welcome %1$s %2$s</string>
+    <string name="checkbox">checkbox</string>
+    <string name="logging_out">Logging out?</string>
+    <string name="are_you_sure_you_want_to_log_out">Are you sure you want to log out</string>
+    <string name="cancel">Cancel</string>
+    <string name="dashboard">Dashboard</string>
+</resources>
