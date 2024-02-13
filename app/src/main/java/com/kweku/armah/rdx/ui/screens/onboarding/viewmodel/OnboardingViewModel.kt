@@ -84,7 +84,8 @@ class OnboardingViewModel @Inject constructor(
         if (pin.length < 7)
             savedStateHandle["onboardingState"] =
                 savedStateHandle.get<OnboardingData>("onboardingState")?.copy(
-                    confirmPin = pin
+                    confirmPin = pin,
+                    isPinValid = true // clears error on ui when user is typing
                 )
     }
 
@@ -112,6 +113,11 @@ class OnboardingViewModel @Inject constructor(
                             onFinishNavigationRoute = BaseScreenDestinations.Main.toString()
                         )
                 }
+            }else{
+                savedStateHandle["onboardingState"] =
+                    savedStateHandle.get<OnboardingData>("onboardingState")?.copy(
+                        isPinValid = false
+                    )
             }
         }
     }

@@ -103,6 +103,7 @@ fun ConfirmPinScreen(
                     )
                 },
                 visualTransformation = PasswordVisualTransformation(),
+                isError = !uiData.isPinValid
             )
 
             Spacer(

@@ -14,6 +14,7 @@ data class OnboardingData(
     val password: String = "",
     val pin: String = "",
     val confirmPin: String = "",
+    val isPinValid: Boolean = true,
     val isTermsAgreed: Boolean = false,
     val onFinishNavigationRoute: String = ""
 ) : Parcelable
