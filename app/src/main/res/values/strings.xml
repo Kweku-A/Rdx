@@ -31,7 +31,7 @@
     <string name="confirm_pin">Confirm pin (6-Digits)</string>
     <string name="finish">Finish</string>
     <string name="logout">Logout</string>
-    <string name="telephone">Telephone</string>
+    <string name="telephone">Telephone (10–13 digits)</string>
     <string name="welcome_user">Welcome %1$s %2$s</string>
     <string name="checkbox">checkbox</string>
     <string name="logging_out">Logging out?</string>
