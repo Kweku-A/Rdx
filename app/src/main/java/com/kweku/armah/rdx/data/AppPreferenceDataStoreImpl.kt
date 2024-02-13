@@ -5,7 +5,6 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
-import com.kweku.armah.rdx.domain.util.IODispatcher
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -17,7 +16,7 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 
 class AppPreferenceDataStoreImpl @Inject constructor(
     @ApplicationContext private val context: Context,
-    @IODispatcher private val dispatcher: CoroutineDispatcher,
+    private val dispatcher: CoroutineDispatcher,
 ) :
     AppPreferenceDataStore {
 

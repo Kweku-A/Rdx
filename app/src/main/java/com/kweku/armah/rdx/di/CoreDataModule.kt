@@ -3,7 +3,6 @@ package com.kweku.armah.rdx.di
 import android.content.Context
 import com.kweku.armah.rdx.data.AppPreferenceDataStore
 import com.kweku.armah.rdx.data.AppPreferenceDataStoreImpl
-import com.kweku.armah.rdx.domain.util.IODispatcher
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,7 +21,7 @@ object CoreDataModule {
     @Provides
     fun providePreferenceStore(
         @ApplicationContext context: Context,
-        @IODispatcher dispatcher: CoroutineDispatcher,
+        dispatcher: CoroutineDispatcher,
     ): AppPreferenceDataStore {
         return AppPreferenceDataStoreImpl(context, dispatcher)
     }
@@ -38,7 +37,6 @@ object CoreDataModule {
 
     @Singleton
     @Provides
-    @IODispatcher
     fun provideIODispatcher(): CoroutineDispatcher {
         return Dispatchers.IO
     }
