@@ -9,14 +9,14 @@ class IsValidEmailTest {
     private val sut = IsValidEmail()
 
     @Test
-    fun should_return_true_when_email_format_is_correct(){
+    fun should_return_true_when_email_format_is_correct() {
         val email = "abc@abc.com"
         val actual = sut(email = email)
         assertTrue(actual)
     }
 
     @Test
-    fun should_return_false_when_email_format_is_not_correct(){
+    fun should_return_false_when_email_format_is_not_correct() {
         val email1 = "abc@abc"
         val email2 = "abc.com"
         val email3 = "abcabccom"

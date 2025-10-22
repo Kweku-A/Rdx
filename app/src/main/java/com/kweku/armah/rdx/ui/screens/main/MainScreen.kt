@@ -40,6 +40,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Devices
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
@@ -49,12 +53,13 @@ import androidx.compose.ui.window.DialogProperties
 import com.kweku.armah.rdx.R
 import com.kweku.armah.rdx.domain.model.UserInfo
 import com.kweku.armah.rdx.domain.wrapper.UiState
+import com.kweku.armah.rdx.ui.theme.RdxTheme
 
 @Composable
 fun MainScreen(
     uiState: UiState<UserInfo>,
     navigateToOnboarding: () -> Unit,
-    onLogout: () -> Unit
+    onLogout: () -> Unit,
 ) {
     when (uiState.isLoading) {
         true -> {
@@ -77,35 +82,39 @@ fun MainScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 private fun MainContent(
     onLogout: () -> Unit,
-    uiState: UiState<UserInfo>
+    uiState: UiState<UserInfo>,
 ) {
     var showLogoutDialog by rememberSaveable {
         mutableStateOf(false)
     }
 
-    Scaffold(topBar = {
-        TopAppBar(
-            title = { Text(text = stringResource(R.string.dashboard)) },
-            actions = {
-                IconButton(onClick = {
-                    showLogoutDialog = true
-                }) {
-                    Icon(
-                        imageVector = Icons.Filled.PowerSettingsNew,
-                        contentDescription = stringResource(R.string.logout)
-                    )
-                }
-            },
-        )
-    }) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(text = stringResource(R.string.dashboard)) },
+                actions = {
+                    IconButton(
+                        onClick = {
+                            showLogoutDialog = true
+                        },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.PowerSettingsNew,
+                            contentDescription = stringResource(R.string.logout),
+                        )
+                    }
+                },
+            )
+        },
+    ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(it),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(it),
             verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-
             if (showLogoutDialog) {
                 AppDialog(
                     header = stringResource(R.string.logging_out),
@@ -123,44 +132,48 @@ private fun MainContent(
             }
 
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 18.dp, vertical = 16.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 18.dp, vertical = 16.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start
+                horizontalArrangement = Arrangement.Start,
             ) {
-
                 val color = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f)
 
                 Text(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .drawBehind {
-                            drawCircle(
-                                color = color,
-                                radius = this.size.maxDimension
-                            )
-                        },
-                    text = uiState.uiData.firstName.first().toString()
-                        .uppercase(),
-                    style = TextStyle(
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        fontSize = 20.sp
-                    )
+                    modifier =
+                        Modifier
+                            .padding(8.dp)
+                            .drawBehind {
+                                drawCircle(
+                                    color = color,
+                                    radius = this.size.maxDimension,
+                                )
+                            },
+                    text =
+                        uiState.uiData.firstName.first().toString()
+                            .uppercase(),
+                    style =
+                        TextStyle(
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            fontSize = 20.sp,
+                        ),
                 )
 
                 Text(
                     stringResource(
                         R.string.welcome_user,
                         uiState.uiData.firstName,
-                        uiState.uiData.lastName
+                        uiState.uiData.lastName,
                     ),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    style = TextStyle(
-                        fontSize = TextUnit(value = 20f, type = TextUnitType.Sp)
-                    ),
-                    modifier = Modifier.padding(start = 16.dp)
+                    style =
+                        TextStyle(
+                            fontSize = TextUnit(value = 20f, type = TextUnitType.Sp),
+                        ),
+                    modifier = Modifier.padding(start = 16.dp),
                 )
             }
 
@@ -174,27 +187,29 @@ private fun MainContent(
 
             AnimatedVisibility(visible = showDetails) {
                 OutlinedCard(modifier = Modifier.width(350.dp)) {
-                    val textStyle = TextStyle(
-                        fontSize = TextUnit(
-                            value = 18f,
-                            type = TextUnitType.Sp
-                        ),
-                        textAlign = TextAlign.Start
-                    )
-
-                    val rowModifier = Modifier
-                        .padding(bottom = 4.dp)
-                        .fillMaxWidth()
-                        .background(
-                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.05f)
+                    val textStyle =
+                        TextStyle(
+                            fontSize =
+                                TextUnit(
+                                    value = 18f,
+                                    type = TextUnitType.Sp,
+                                ),
+                            textAlign = TextAlign.Start,
                         )
-                        .padding(8.dp)
+
+                    val rowModifier =
+                        Modifier
+                            .padding(bottom = 4.dp)
+                            .fillMaxWidth()
+                            .background(
+                                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.05f),
+                            )
+                            .padding(8.dp)
                     Row(
                         modifier = rowModifier,
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Start
+                        horizontalArrangement = Arrangement.Start,
                     ) {
-
                         Text(
                             text = "Telephone:",
                             style = textStyle,
@@ -209,9 +224,8 @@ private fun MainContent(
                     Row(
                         modifier = rowModifier,
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Start
+                        horizontalArrangement = Arrangement.Start,
                     ) {
-
                         Text(
                             text = "Email:",
                             style = textStyle,
@@ -246,34 +260,38 @@ fun AppDialog(
         ) {
             Column(modifier = Modifier.padding(top = 20.dp)) {
                 Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 10.dp, horizontal = 20.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 10.dp, horizontal = 20.dp),
                     text = header,
-                    style = TextStyle(
-                        textAlign = TextAlign.Center,
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                    ),
+                    style =
+                        TextStyle(
+                            textAlign = TextAlign.Center,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                        ),
                 )
                 Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 10.dp, horizontal = 20.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 10.dp, horizontal = 20.dp),
                     text = dialogMessage,
-                    style = TextStyle(
-                        textAlign = TextAlign.Center,
-                        fontSize = 16.sp,
-                    ),
+                    style =
+                        TextStyle(
+                            textAlign = TextAlign.Center,
+                            fontSize = 16.sp,
+                        ),
                 )
 
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(),
                     horizontalArrangement = Arrangement.End,
                 ) {
-
                     TextButton(onClick = onNegativeClick, modifier = Modifier.padding(8.dp)) {
                         Text(
                             text = negativeButtonText,
@@ -289,7 +307,31 @@ fun AppDialog(
                     }
                 }
             }
-
         }
+    }
+}
+
+class MainContentParameterPreview : PreviewParameterProvider<UserInfo> {
+    override val values: Sequence<UserInfo>
+        get() =
+            sequenceOf(
+                UserInfo(),
+                UserInfo(
+                    firstName = "aaa",
+                    lastName = "bbb",
+                    email = "abc@anc.com",
+                    phoneNumber = "123412323",
+                    pin = "1234",
+                ),
+            )
+}
+
+@Preview(device = Devices.PIXEL_7_PRO)
+@Composable
+private fun MainContentPreview(
+    @PreviewParameter(MainContentParameterPreview::class) uiState: UiState<UserInfo>,
+) {
+    RdxTheme {
+        MainContent(onLogout = {}, uiState = uiState)
     }
 }

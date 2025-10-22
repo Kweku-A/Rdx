@@ -113,7 +113,7 @@ class OnboardingViewModel @Inject constructor(
                             onFinishNavigationRoute = BaseScreenDestinations.Main.toString()
                         )
                 }
-            }else{
+            } else {
                 savedStateHandle["onboardingState"] =
                     savedStateHandle.get<OnboardingData>("onboardingState")?.copy(
                         isPinValid = false

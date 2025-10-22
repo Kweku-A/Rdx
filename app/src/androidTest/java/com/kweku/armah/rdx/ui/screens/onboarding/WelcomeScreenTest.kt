@@ -20,7 +20,7 @@ class WelcomeScreenTest {
 
         composeTestRule.setContent {
             RdxTheme {
-               WelcomeScreen {}
+                WelcomeScreen {}
             }
         }
 
@@ -36,7 +36,7 @@ class WelcomeScreenTest {
         var isNavigating = false
         composeTestRule.setContent {
             RdxTheme {
-                WelcomeScreen{
+                WelcomeScreen {
                     isNavigating = true
                 }
             }

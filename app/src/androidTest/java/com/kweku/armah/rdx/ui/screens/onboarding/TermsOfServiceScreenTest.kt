@@ -30,11 +30,11 @@ class TermsOfServiceScreenTest {
 
         composeTestRule.setContent {
             RdxTheme {
-               TermsOfServiceScreen(
-                   uiData = fakeData,
-                   onPreviousClick = { isNavigating = true },
-                   onNextClick = { },
-                   onTermsCheckChange = {})
+                TermsOfServiceScreen(
+                    uiData = fakeData,
+                    onPreviousClick = { isNavigating = true },
+                    onNextClick = { },
+                    onTermsCheckChange = {})
             }
         }
 

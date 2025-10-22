@@ -61,7 +61,8 @@ class MainViewModelTest {
         )
         // check value is in datastore
         assertTrue(
-            appPreferenceDataStore.getDataStore(PreferenceKeys.userInfo).first()?.isNotEmpty() ?: false
+            appPreferenceDataStore.getDataStore(PreferenceKeys.userInfo).first()?.isNotEmpty()
+                ?: false
         )
 
         sut.getUserInfo()
@@ -91,7 +92,8 @@ class MainViewModelTest {
 
         // check value is in datastore
         assertTrue(
-            appPreferenceDataStore.getDataStore(PreferenceKeys.userInfo).first()?.isNotEmpty() ?: false
+            appPreferenceDataStore.getDataStore(PreferenceKeys.userInfo).first()?.isNotEmpty()
+                ?: false
         )
 
         sut.onLogout()

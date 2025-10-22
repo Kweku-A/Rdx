@@ -133,7 +133,8 @@ fun CredentialsScreen(
                 shape = RoundedCornerShape(4.dp),
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Done,
-                    autoCorrect = false
+                    autoCorrect = false,
+                    keyboardType = KeyboardType.Password
                 ),
                 keyboardActions = KeyboardActions(
                     onDone = { keyboardController?.hide() },

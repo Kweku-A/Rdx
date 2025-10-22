@@ -85,7 +85,7 @@ fun TermsOfServiceScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Checkbox(
-                    modifier = Modifier.semantics{contentDescription = "checkbox"},
+                    modifier = Modifier.semantics { contentDescription = "checkbox" },
                     checked = uiData.isTermsAgreed,
                     onCheckedChange = { isChecked ->
                         onTermsCheckChange(isChecked)
