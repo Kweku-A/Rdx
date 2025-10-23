@@ -10,16 +10,20 @@ $TMP_DIR = "coverage_tmp"
 $MAIN_DIR = Join-Path $TMP_DIR "main"
 $FEATURE_DIR = Join-Path $TMP_DIR "feature"
 $HTML_FILE = Join-Path $TMP_DIR "coverage_report.html"
+$LOG_FILE = Join-Path $TMP_DIR "compare_coverage.log"
 
 New-Item -ItemType Directory -Force -Path $MAIN_DIR, $FEATURE_DIR | Out-Null
 
 function Log($msg)
 {
+    $timestamp = ("[{0}] {1}" -f (Get-Date -Format "HH:mm:ss"), $msg)
     if ($enableLogs)
     {
-        Write-Host ("[{0}] {1}" -f (Get-Date -Format "HH:mm:ss"), $msg)
+        Write-Host $timestamp
     }
+    Add-Content -Path $LOG_FILE -Value $timestamp
 }
+
 
 function Run-Command($cmd)
 {
@@ -45,6 +49,8 @@ function Run-Coverage($branch, $outDir)
             $xmlFile = Get-ChildItem $xmlDir -Filter "*.xml" | Select-Object -First 1
             $safeName = ($_ | Split-Path -Leaf) -replace '[^a-zA-Z0-9_]', '_'
             $targetFile = Join-Path $outDir "$safeName.xml"
+            Log "xml file => $xmlFile"
+            Log "xml file => $targetFile"
             if ($xmlFile)
             {
                 Copy-Item $xmlFile.FullName -Destination $targetFile -Force
