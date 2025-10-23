@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "rdx_prefs")
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "rdx_prefs")
 
 class AppPreferenceDataStoreImpl @Inject constructor(
     @ApplicationContext private val context: Context,

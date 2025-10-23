@@ -12,7 +12,6 @@ import com.kweku.armah.rdx.domain.util.IsValidPhoneNumber
 import com.kweku.armah.rdx.ui.screens.destinations.BaseScreenDestinations
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
@@ -28,97 +27,68 @@ class OnboardingViewModel @Inject constructor(
     var uiState = savedStateHandle.getStateFlow("onboardingState", OnboardingData())
 
     fun onTermsAgreed(isChecked: Boolean) {
-        savedStateHandle["onboardingState"] =
-            savedStateHandle.get<OnboardingData>("onboardingState")?.copy(
-                isTermsAgreed = isChecked
-            )
+        savedStateHandle["onboardingState"] = uiState.value.copy(isTermsAgreed = isChecked)
     }
 
     fun onFirstNameChange(firstName: String) {
-        savedStateHandle["onboardingState"] =
-            savedStateHandle.get<OnboardingData>("onboardingState")?.copy(
-                firstName = firstName
-            )
+        savedStateHandle["onboardingState"] = uiState.value.copy(firstName = firstName)
     }
 
     fun onLastNameChange(lastName: String) {
-        savedStateHandle["onboardingState"] =
-            savedStateHandle.get<OnboardingData>("onboardingState")?.copy(
-                lastName = lastName
-            )
+        savedStateHandle["onboardingState"] = uiState.value.copy(lastName = lastName)
     }
 
     fun onEmailNameChange(email: String) {
         savedStateHandle["onboardingState"] =
-            savedStateHandle.get<OnboardingData>("onboardingState")?.copy(
-                email = email,
-                isEmailValid = isValidEmail(email)
-            )
+            uiState.value.copy(email = email, isEmailValid = isValidEmail(email))
     }
 
     fun onPasswordChange(password: String) {
-        savedStateHandle["onboardingState"] =
-            savedStateHandle.get<OnboardingData>("onboardingState")?.copy(
-                password = password
-            )
+        savedStateHandle["onboardingState"] = uiState.value.copy(password = password)
     }
 
     fun onPhoneNumberChange(phoneNumber: String) {
-        savedStateHandle["onboardingState"] =
-            savedStateHandle.get<OnboardingData>("onboardingState")?.copy(
-                phoneNumber = phoneNumber,
-                isPhoneNumberValid = isValidPhoneNumber(phoneNumber)
-            )
+        savedStateHandle["onboardingState"] = uiState.value.copy(
+            phoneNumber = phoneNumber,
+            isPhoneNumberValid = isValidPhoneNumber(phoneNumber)
+        )
     }
 
     fun onPinChange(pin: String) {
         if (pin.length < 7) {
-            savedStateHandle["onboardingState"] =
-                savedStateHandle.get<OnboardingData>("onboardingState")?.copy(
-                    pin = pin
-                )
+            savedStateHandle["onboardingState"] = uiState.value.copy(pin = pin)
         }
     }
 
     fun onConfirmPin(pin: String) {
         if (pin.length < 7)
             savedStateHandle["onboardingState"] =
-                savedStateHandle.get<OnboardingData>("onboardingState")?.copy(
-                    confirmPin = pin,
-                    isPinValid = true // clears error on ui when user is typing
-                )
+                uiState.value.copy(confirmPin = pin, isPinValid = true)
     }
 
     fun onFinishClicked() {
-        val onboardingData = savedStateHandle.get<OnboardingData>("onboardingState")
-        onboardingData?.let { uiData ->
-            if (uiData.pin == uiData.confirmPin) {
-                viewModelScope.launch {
+        val uiData = uiState.value
+        if (uiData.pin == uiData.confirmPin) {
+            viewModelScope.launch {
 
-                    val userInfo = UserInfo(
-                        firstName = uiData.firstName,
-                        lastName = uiData.lastName,
-                        email = uiData.email,
-                        phoneNumber = uiData.phoneNumber,
-                        pin = uiData.pin,
-                    )
+                val userInfo = UserInfo(
+                    firstName = uiData.firstName,
+                    lastName = uiData.lastName,
+                    email = uiData.email,
+                    phoneNumber = uiData.phoneNumber,
+                    pin = uiData.pin,
+                )
 
-                    appPreferenceDataStore.updateDataStore(
-                        PreferenceKeys.userInfo,
-                        json.encodeToString(userInfo)
-                    )
+                appPreferenceDataStore.updateDataStore(
+                    PreferenceKeys.userInfo,
+                    json.encodeToString(userInfo)
+                )
 
-                    savedStateHandle["onboardingState"] =
-                        uiData.copy(
-                            onFinishNavigationRoute = BaseScreenDestinations.Main.toString()
-                        )
-                }
-            }else{
                 savedStateHandle["onboardingState"] =
-                    savedStateHandle.get<OnboardingData>("onboardingState")?.copy(
-                        isPinValid = false
-                    )
+                    uiData.copy(onFinishNavigationRoute = BaseScreenDestinations.Main.toString())
             }
+        } else {
+            savedStateHandle["onboardingState"] = uiState.value.copy(isPinValid = false)
         }
     }
 }

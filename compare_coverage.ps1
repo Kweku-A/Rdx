@@ -1,6 +1,8 @@
 param(
     [string]$mainBranch = "develop",
-    [bool]$enableLogs = $true
+    [bool]$enableLogs = $true,
+    [switch]$skipMain,
+    [switch]$skipFeature
 )
 
 # --- Temp folders ---
@@ -33,7 +35,7 @@ function Run-Coverage($branch, $outDir)
     Run-Command "git checkout $branch -q"
 
     Write-Host "Running tests and generating coverage..."
-    Run-Command ".\gradlew clean testGhs_ukDebugUnitTest testGhs_ukDebugUnitTestCoverage --no-daemon --parallel --max-workers=8 --build-cache --console=plain"
+    Run-Command ".\gradlew clean jacocoTestReport --no-daemon --parallel --max-workers=8 --build-cache --console=plain"
 
     Write-Host "Collecting XML reports..."
     Get-ChildItem -Recurse -Directory -Filter "build" | ForEach-Object {
@@ -77,7 +79,7 @@ function Parse-Coverage($file)
         }
         else
         {
-            [math]::Round($lc*100/($lc + $lm), 2)
+            [math]::Round($lc * 100 / ($lc + $lm), 2)
         }
         $branchPct = if (($bc + $bm) -eq 0)
         {
@@ -85,7 +87,7 @@ function Parse-Coverage($file)
         }
         else
         {
-            [math]::Round($bc*100/($bc + $bm), 2)
+            [math]::Round($bc * 100 / ($bc + $bm), 2)
         }
         $instrPct = if (($ic + $im) -eq 0)
         {
@@ -93,7 +95,7 @@ function Parse-Coverage($file)
         }
         else
         {
-            [math]::Round($ic*100/($ic + $im), 2)
+            [math]::Round($ic * 100 / ($ic + $im), 2)
         }
 
         return @($linePct, $branchPct, $instrPct)
@@ -109,10 +111,49 @@ $CURRENT_BRANCH = (git rev-parse --abbrev-ref HEAD).Trim()
 Log "Current branch: $CURRENT_BRANCH"
 Log "Main branch: $mainBranch"
 
-# --- Run coverage ---
-Run-Coverage $mainBranch $MAIN_DIR
+# --- Stash uncommitted changes before switching ---
+$hasChanges = (git status --porcelain)
+$stashNeeded = $false
+if ($hasChanges)
+{
+    Log "Uncommitted changes detected — stashing before branch switch..."
+    Run-Command "git stash push -u -m 'temp_coverage_stash'"
+    $stashNeeded = $true
+}
+else
+{
+    Log "No uncommitted changes — safe to switch branches."
+}
+
+# --- Run coverage or reuse cached ---
+if (-not $skipMain)
+{
+    Log "Running main branch coverage..."
+    Run-Coverage $mainBranch $MAIN_DIR
+}
+else
+{
+    Log "Skipping main branch coverage, using cached data from $MAIN_DIR"
+}
+
+# --- Switch back and unstash if needed before feature coverage ---
 Run-Command "git checkout $CURRENT_BRANCH -q"
-Run-Coverage $CURRENT_BRANCH $FEATURE_DIR
+
+if ($stashNeeded -and -not $skipFeature)
+{
+    Log "Restoring stashed changes..."
+    Run-Command "git stash pop"
+}
+
+if (-not $skipFeature)
+{
+    Log "Running feature branch coverage..."
+    Run-Coverage $CURRENT_BRANCH $FEATURE_DIR
+}
+else
+{
+    Log "Skipping feature branch coverage, using cached data from $FEATURE_DIR"
+}
 
 # --- Generate HTML safely ---
 $sb = New-Object System.Text.StringBuilder
@@ -148,7 +189,8 @@ function cls($a, $b)
 Get-ChildItem $MAIN_DIR -Filter "*.xml" | ForEach-Object {
     $module = $_.BaseName
     $mainCov = Parse-Coverage $_.FullName
-    $featCov = Parse-Coverage (Join-Path $FEATURE_DIR "$module.xml")
+    $featureFile = Join-Path $FEATURE_DIR "$module.xml"
+    $featCov = Parse-Coverage $featureFile
 
     $null = $sb.AppendLine("<tr><td rowspan='3'>$module</td><td>Line</td><td>$( $mainCov[0] )</td><td class='$( cls $mainCov[0] $featCov[0] )'>$( $featCov[0] )</td></tr>")
     $null = $sb.AppendLine("<tr><td>Branch</td><td>$( $mainCov[1] )</td><td class='$( cls $mainCov[1] $featCov[1] )'>$( $featCov[1] )</td></tr>")
@@ -158,5 +200,5 @@ Get-ChildItem $MAIN_DIR -Filter "*.xml" | ForEach-Object {
 $null = $sb.AppendLine("</table></body></html>")
 $sb.ToString() | Out-File -Encoding UTF8 $HTML_FILE
 
-Log "HTML coverage report generated at: $HTML_FILE"
+Log "✅ HTML coverage report generated at: $HTML_FILE"
 Start-Process $HTML_FILE

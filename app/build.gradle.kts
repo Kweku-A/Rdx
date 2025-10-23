@@ -1,20 +1,27 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    id("org.jetbrains.kotlin.plugin.compose") version "2.2.21"
     id("kotlin-parcelize")
     kotlin("kapt")
     alias(libs.plugins.hiltPlugin)
     kotlin("plugin.serialization") version "1.9.22"
+    id("jacoco")
 }
+
+jacoco {
+    toolVersion = "0.8.10" // or latest available
+}
+
 
 android {
     namespace = "com.kweku.armah.rdx"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.kweku.armah.rdx"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -32,6 +39,10 @@ android {
                 "proguard-rules.pro"
             )
         }
+
+        getByName("debug") {
+            enableUnitTestCoverage = false // Enable coverage when running tests
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -43,15 +54,63 @@ android {
     buildFeatures {
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.9"
-    }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
+    // Add this block to enable Robolectric
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
 }
+
+// In app/build.gradle.kts
+
+// In app/build.gradle.kts
+
+tasks.register<JacocoReport>("jacocoTestReport") {
+    dependsOn("testDebugUnitTest")
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+
+    val mainSrc = "$projectDir/src/main/java"
+    sourceDirectories.setFrom(files(mainSrc))
+
+    val fileFilter = listOf(
+        "**/R.class",
+        "**/R$*.class",
+        "**/BuildConfig.*",
+        "**/Manifest*.*",
+        "android/**/*.*",
+        "**/*Test*.*",
+        "**/di/*",
+        "**/models/*"
+    )
+
+    classDirectories.setFrom(
+        fileTree("$buildDir/tmp/kotlin-classes/debug") {
+            exclude(fileFilter)
+        }
+    )
+
+    executionData.setFrom(
+        fileTree(buildDir) {
+            include(
+                "outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec",
+                "jacoco/testDebugUnitTest.exec",
+                "jacoco/testDebugUnitTest.exec.gz"
+            )
+        }
+    )
+}
+
 
 dependencies {
     implementation(libs.androidx.core.ktx)
@@ -74,6 +133,7 @@ dependencies {
     kapt(libs.hilt.compiler)
 }
 dependencies {
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.kotlinx.coroutines.test)
@@ -84,6 +144,28 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
+
+    // For MockK (mocking library)
+    testImplementation(libs.mockk)
+    testImplementation(libs.androidx.datastore.preferences)
+    testImplementation(libs.robolectric)
+
+    testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
+
+    // Robolectric for running Android framework code on the JVM
+    testImplementation(libs.robolectric)
+
+    // Compose UI Testing dependencies
+    // These work with both local (Robolectric) and instrumented tests
+    testImplementation(libs.androidx.compose.ui.test.junit4)
+
+    testImplementation(libs.androidx.compose.ui.test.junit4)
+    testImplementation(libs.androidx.junit.ktx)
+
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }
